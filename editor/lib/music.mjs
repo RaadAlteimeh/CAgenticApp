@@ -9,17 +9,23 @@ const HEADERS = { "User-Agent": "video-editor-pipeline/1.0 (open-source tooling)
 const MUSIC_DIR = path.join(ROOT, "assets", "music");
 
 /** Search Openverse for tracks that allow commercial use and modification. */
-export async function searchMusic(query, { minSeconds = 0, limit = 10 } = {}) {
-  const params = new URLSearchParams({
-    q: query,
-    license_type: "commercial,modification",
-    category: "music",
-    page_size: "20",
-  });
-  const res = await fetch(`${API}?${params}`, { headers: HEADERS });
+async function query(params) {
+  const res = await fetch(`${API}?${new URLSearchParams(params)}`, { headers: HEADERS });
   if (!res.ok) throw new Error(`Openverse search failed (${res.status}). Try again in a minute — anonymous use is rate-limited.`);
-  const data = await res.json();
-  return data.results
+  return (await res.json()).results ?? [];
+}
+
+export async function searchMusic(q, { minSeconds = 0, limit = 10 } = {}) {
+  const base = { q, license_type: "commercial,modification", page_size: "20" };
+  // Many tracks have no category, so if the "music" category is sparse, search everything
+  // and drop anything under 30 s (those are almost always sound effects).
+  let results = await query({ ...base, category: "music" });
+  if (results.length < 5) {
+    const seen = new Set(results.map((r) => r.id));
+    const extra = (await query(base)).filter((r) => !seen.has(r.id) && (r.duration ?? 0) >= 30000);
+    results = [...results, ...extra];
+  }
+  return results
     .filter((r) => r.url && (r.duration ?? 0) / 1000 >= minSeconds)
     .slice(0, limit)
     .map((r) => ({
@@ -27,7 +33,7 @@ export async function searchMusic(query, { minSeconds = 0, limit = 10 } = {}) {
       title: r.title || "Untitled",
       creator: r.creator || "Unknown artist",
       seconds: Math.round((r.duration ?? 0) / 1000),
-      license: `CC ${String(r.license).toUpperCase()} ${r.license_version ?? ""}`.trim(),
+      license: r.license === "cc0" ? "CC0 (public domain)" : r.license === "pdm" ? "Public domain" : `CC ${String(r.license).toUpperCase()} ${r.license_version ?? ""}`.trim(),
       licenseUrl: r.license_url,
       page: r.foreign_landing_url,
       source: r.source,
