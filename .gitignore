@@ -1,0 +1,11 @@
+node_modules/
+build/
+output/
+renders/
+samples/
+recordings/*
+!recordings/.gitkeep
+assets/music/*
+!assets/music/.gitkeep
+*.log
+.DS_Store

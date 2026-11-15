@@ -1,0 +1,15 @@
+{
+  "title": "My video",
+  "output": "output/my-video.mp4",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "quality": "standard",
+  "theme": { "background": "#0b0d12", "accent": "#5b8cff", "text": "#ffffff" },
+  "music": { "query": "calm ambient", "volume": 0.25, "duck": true },
+  "segments": [
+    { "type": "title", "text": "My video", "subtitle": "A short subtitle", "duration": 3 },
+    { "type": "clip", "src": "recordings/REPLACE-WITH-YOUR-RECORDING.mp4", "start": 0, "caption": "What this part is about" },
+    { "type": "title", "text": "Thanks for watching", "duration": 2.5 }
+  ]
+}

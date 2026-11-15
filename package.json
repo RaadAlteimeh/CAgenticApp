@@ -1,0 +1,28 @@
+{
+  "name": "cagentic-video-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Video editing pipeline: OBS recording, FFmpeg editing, Openverse free music, HyperFrames titles/captions/render.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "make": "node editor/cli.mjs make",
+    "preview": "node editor/cli.mjs preview",
+    "new": "node editor/cli.mjs new",
+    "music": "node editor/cli.mjs music",
+    "record": "node editor/cli.mjs record",
+    "sample": "node editor/cli.mjs sample",
+    "doctor": "node editor/cli.mjs doctor",
+    "help": "node editor/cli.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaadAlteimeh/CAgenticApp.git"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "hyperframes": "^0.9.53"
+  }
+}

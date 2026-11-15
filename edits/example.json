@@ -1,0 +1,25 @@
+{
+  "title": "Pipeline demo",
+  "output": "output/example.mp4",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "quality": "standard",
+  "theme": { "background": "#0b0d12", "accent": "#5b8cff", "text": "#ffffff" },
+  "music": { "query": "upbeat electronic", "volume": 0.3, "duck": true },
+  "segments": [
+    { "type": "title", "text": "Building with HyperFrames", "subtitle": "OBS · FFmpeg · Openverse", "duration": 3 },
+    {
+      "type": "clip",
+      "src": "samples/screen-demo.mp4",
+      "start": 1,
+      "end": 11,
+      "captions": [
+        { "at": 0, "duration": 4.5, "text": "Clips are trimmed and resized with FFmpeg" },
+        { "at": 5, "text": "Music ducks automatically under speech" }
+      ]
+    },
+    { "type": "clip", "src": "samples/talking-head.mp4", "caption": "Any size or shape of footage fits the frame" },
+    { "type": "title", "text": "Thanks for watching", "duration": 2.5 }
+  ]
+}
