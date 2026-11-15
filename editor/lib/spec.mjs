@@ -10,7 +10,7 @@ const DEFAULTS = {
   height: 1080,
   fps: 30,
   quality: "standard",
-  theme: { background: "#0b0d12", accent: "#5b8cff", text: "#ffffff", font: "Segoe UI, Inter, Arial, sans-serif" },
+  theme: { background: "#0b0d12", accent: "#5b8cff", text: "#ffffff", highlight: "#ffd84d", font: "Segoe UI, Inter, Arial, sans-serif" },
   transition: 0.4,
   music: null,
 };
@@ -40,6 +40,8 @@ export function loadSpec(file) {
       const src = path.resolve(ROOT, s.src);
       if (!fs.existsSync(src)) fail(`${where}: video not found: ${s.src}`);
       if (s.end != null && s.start != null && s.end <= s.start) fail(`${where}: "end" must be after "start".`);
+      for (const z of s.zooms ?? []) if (typeof z.at !== "number") fail(`${where}: every zoom needs "at" (seconds in the recording).`);
+      for (const c of s.callouts ?? []) if (typeof c.at !== "number" || !c.text) fail(`${where}: every callout needs "at" and "text".`);
       return { volume: 1, ...s, src };
     }
     fail(`${where}: "type" must be "title" or "clip".`);

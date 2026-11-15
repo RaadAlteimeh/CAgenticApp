@@ -8,6 +8,7 @@ import { planTimeline, prepareMedia, mixSoundtrack } from "./lib/prep.mjs";
 import { writeComposition } from "./lib/compose.mjs";
 import { searchMusic, downloadTrack, fetchMusicFor, creditLine } from "./lib/music.mjs";
 import { launchObs } from "./lib/record.mjs";
+import { getTranscript, formatTranscript } from "./lib/transcribe.mjs";
 
 const HELP = `
 Video editor — commands (run with: npm run <command> -- <args>)
@@ -15,6 +16,7 @@ Video editor — commands (run with: npm run <command> -- <args>)
   make <edit.json>        Build and render a video described by an edit file
   preview <edit.json>     Build it, then open the HyperFrames live preview in your browser
   new <name>              Create edits/<name>.json from the template
+  transcribe <video>      Print what's said, with timestamps (to pick zoom/callout moments)
   music <search words>    Search free music on Openverse  (add --get N to download result N)
   record [--start]        Open OBS Studio (with --start it begins recording immediately)
   sample                  Generate two demo clips in samples/ so you can try the pipeline
@@ -95,6 +97,13 @@ const commands = {
     }
     tracks.forEach((t, i) => console.log(`${String(i + 1).padStart(2)}. ${t.title} — ${t.creator} (${t.seconds}s, ${t.license})\n    ${t.page}`));
     console.log('\nDownload one with --get N, or put  "music": { "query": "' + query + '" }  in your edit file.');
+  },
+
+  async transcribe([file]) {
+    if (!file) fail("Usage: npm run transcribe -- recordings/my-take.mkv");
+    const src = path.resolve(ROOT, file);
+    if (!fs.existsSync(src)) fail(`Not found: ${file}`);
+    console.log(formatTranscript(await getTranscript(src)));
   },
 
   async record(args) {

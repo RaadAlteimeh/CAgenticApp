@@ -12,6 +12,7 @@
     "preview": "node editor/cli.mjs preview",
     "new": "node editor/cli.mjs new",
     "music": "node editor/cli.mjs music",
+    "transcribe": "node editor/cli.mjs transcribe",
     "record": "node editor/cli.mjs record",
     "sample": "node editor/cli.mjs sample",
     "doctor": "node editor/cli.mjs doctor",
